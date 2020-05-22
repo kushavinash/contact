@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -32,6 +35,8 @@ public class Contact_ {
 
     @JsonProperty("id")
    
+    @NotNull(message = "Id is compulsory")
+    @NotBlank(message = "Id is compulsory")
     private Integer id;
     @JsonProperty("type")
     private String type;

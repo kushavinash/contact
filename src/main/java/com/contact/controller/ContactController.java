@@ -1,6 +1,9 @@
 package com.contact.controller;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +60,7 @@ public class ContactController {
 	 }
 	  
 	  @PostMapping("/contacts")
-	  public Contact createContact(@RequestBody Contact contact) {	
+	  public Contact createContact(@RequestBody @Valid Contact contact) {	
 		  
 		  //aply validation on incoming data for 
 		  //A customer or supplier can be a person or a company, but not both. Additionally, a company or person can be a supplier and a customer at the same time.
