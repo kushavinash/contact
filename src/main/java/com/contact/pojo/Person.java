@@ -1,9 +1,15 @@
 
 package com.contact.pojo;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -16,18 +22,32 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "fname",
-    "lname"
+    "lname",
+    "id"
 })
-public class Person {
+@Entity
+public class Person implements Serializable {
+	
+	 @Id
+	 @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column
+    private Integer id;
 
-    @JsonProperty("fname")
+
+
+	@JsonProperty("fname")
     @Pattern(regexp = "[a-z-A-Z]*", message = "First name has invalid characters")
+    @Column
     private String fname;
     @JsonProperty("lname")
     @Pattern(regexp = "[a-z-A-Z]*", message = "Last name has invalid characters")
+    @Column
     private String lname;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    
+	/*
+	 * @JsonIgnore private Map<String, Object> additionalProperties = new
+	 * HashMap<String, Object>();
+	 */
 
     @JsonProperty("fname")
     public String getFname() {
@@ -49,14 +69,20 @@ public class Person {
         this.lname = lname;
     }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
+	/*
+	 * @JsonAnyGetter public Map<String, Object> getAdditionalProperties() { return
+	 * this.additionalProperties; }
+	 * 
+	 * @JsonAnySetter public void setAdditionalProperty(String name, Object value) {
+	 * this.additionalProperties.put(name, value); }
+	 */
+    
+    public Integer getId() {
+		return id;
+	}
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 }

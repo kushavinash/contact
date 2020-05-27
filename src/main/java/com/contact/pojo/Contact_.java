@@ -1,15 +1,18 @@
 
 package com.contact.pojo;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+//import org.springframework.data.annotation.Id;
+//ssimport org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -17,6 +20,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+
+import javax.persistence.Id;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -28,30 +45,40 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "customer",
     "supplier"
 })
-
-public class Contact_ {
+@Entity
+public class Contact_ implements Serializable {
 	
-	
-
-    @JsonProperty("id")
-   
-    @NotNull(message = "Id is compulsory")
-    @NotBlank(message = "Id is compulsory")
+	   
+   // @NotNull(message = "Id is compulsory")
+   // @NotBlank(message = "Id is compulsory")
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column
     private Integer id;
     @JsonProperty("type")
+    @Column
     private String type;
     @JsonProperty("person")
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="contact_person")
     private Person person;
     @JsonProperty("company")
-    private Company company;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="contact_company")
+    private Company company ;
     @JsonProperty("phone")
-    private Phone phone;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="contact_phone")
+    private Phone phone ;
     @JsonProperty("customer")
-    private List<Customer> customer = null;
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="contact_customer")
+    private Customer customer  ;
     @JsonProperty("supplier")
-    private List<Supplier> supplier = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="contact_supplier")
+    private Supplier supplier ;
+    
 
     @JsonProperty("id")
    
@@ -65,6 +92,7 @@ public class Contact_ {
     }
 
     @JsonProperty("type")
+    @Column
     public String getType() {
         return type;
     }
@@ -104,34 +132,21 @@ public class Contact_ {
         this.phone = phone;
     }
 
-    @JsonProperty("customer")
-    public List<Customer> getCustomer() {
-        return customer;
-    }
+	public Customer getCustomer() {
+		return customer;
+	}
 
-    @JsonProperty("customer")
-    public void setCustomer(List<Customer> customer) {
-        this.customer = customer;
-    }
+	public Supplier getSupplier() {
+		return supplier;
+	}
 
-    @JsonProperty("supplier")
-    public List<Supplier> getSupplier() {
-        return supplier;
-    }
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
 
-    @JsonProperty("supplier")
-    public void setSupplier(List<Supplier> supplier) {
-        this.supplier = supplier;
-    }
+	public void setSupplier(Supplier supplier) {
+		this.supplier = supplier;
+	}
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
+	
 }
